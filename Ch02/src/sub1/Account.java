@@ -29,9 +29,9 @@ public void withdraw(int money) {
 public void show(JspWriter out) throws IOException {
 	out.println("<h4>현재잔액</h4>");
 	out.println("<p>");
-	out.println("은행명 : "+bank+"<br/>");
+	out.println("은 행 명 : "+bank+"<br/>");
 	out.println("계좌번호 : "+id+"<br/>");
-	out.println("입금주 : "+name+"<br/>");
+	out.println("예 금 주 : "+name+"<br/>");
 	out.println("현재잔액 : "+money+"<br/>");
 	out.println("</p>");
 }
