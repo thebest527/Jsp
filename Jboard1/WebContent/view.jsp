@@ -1,3 +1,4 @@
+<%@page import="kr.co.jboard1.bean.FileBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="kr.co.jboard1.bean.ArticleBean"%>
@@ -19,6 +20,7 @@
 	
 	request.setCharacterEncoding("utf-8");	
 	String seq = request.getParameter("seq");
+	String download = request.getParameter("download");
 	
 	// 1, 2단계
 	Connection conn = DBConfig.getConnection();
@@ -40,6 +42,7 @@
 	
 	// 5단계
 	ArticleBean article = new ArticleBean();
+	FileBean fileBean = new FileBean();
 	
 	if(rs.next()){		
 		article.setSeq(rs.getInt(1));
@@ -53,8 +56,16 @@
 		article.setUid(rs.getString(9));
 		article.setRegip(rs.getString(10));
 		article.setRdate(rs.getString(11));
+		
+		fileBean.setSeq(rs.getInt(12));
+		fileBean.setParent(rs.getInt(13));
+		fileBean.setOldName(rs.getString(14));
+		fileBean.setNewName(rs.getString(15));
+		fileBean.setDownload(rs.getInt(16));
+		fileBean.setRdate(rs.getString(17));		
+		article.setFileBean(fileBean);
 	}
-	
+			
 	List<ArticleBean> comments = new ArrayList<>();
 	while(rsComment.next()){
 		ArticleBean comment = new ArticleBean();
@@ -86,6 +97,13 @@
     <meta charset="UTF-8">
     <title>글보기</title>
     <link rel="stylesheet" href="./css/style.css"/>
+    <script>
+    	var download = "<%= download %>";
+    
+    	if(download == 'fail'){
+    		alert('해당하는 파일이 없습니다.\n관리자에게 문의하시기 바랍니다.');
+    	}
+    </script>
 </head>
 <body>
     <div id="wrapper">
@@ -96,12 +114,16 @@
                     <td>제목</td>
                     <td><input type="text" name="title" value="<%= article.getTitle() %>" readonly/></td>
                 </tr>
-                <% if(article.getFile() == 1){ %>
+                <% 
+                if(article.getFile() == 1){
+                	FileBean fBean = article.getFileBean();
+                	session.setAttribute("fBean", fBean);
+                %>
                 <tr>
                     <td>첨부파일</td>
                     <td>
-                        <a href="#">2020년 상반기 매출자료.xls</a>
-                        <span>7회 다운로드</span>
+                        <a href="/Jboard1/proc/download.jsp?seq=<%= fBean.getSeq() %>"><%= fBean.getOldName() %></a>
+                        <span><%= fBean.getDownload() %>회 다운로드</span>
                     </td>
                 </tr>
                 <% } %>
@@ -126,14 +148,16 @@
             </script>
             
             <div>
+            
             	<%
             		if(mb.getUid().equals(article.getUid())){
             	%>
-                <a href="/Jboard1/proc/procDelete.jsp?seq=<%= article.getSeq() %>" onclick="return onDelete()" class="btnDelete">삭제</a>
+                <a href="/Jboard1/proc/delete.jsp?seq=<%= article.getSeq() %>" onclick="return onDelete()" class="btnDelete">삭제</a>
                 <a href="/Jboard1/modify.jsp" class="btnModify">수정</a>
                 <%
-                	} 
+                	}
                 %>
+                
                 <a href="/Jboard1/list.jsp" class="btnList">목록</a>
             </div>
             
@@ -148,12 +172,12 @@
                     </span>
                     <textarea name="comment" readonly><%= comment.getContent() %></textarea>
                     <div>
-                    <%
-            			if(mb.getUid().equals(article.getUid())){
-            		%>
-                        <a href="/Jboard1/proc/deleteComment.jsp?seq<%= comment.getSeq() %>&parent=<%=article.getSeq() %>">삭제</a>
+                    	<%
+            				if(mb.getUid().equals(comment.getUid())){
+            			%>
+                        <a href="/Jboard1/proc/deleteComment.jsp?seq=<%= comment.getSeq() %>">삭제</a>
                         <a href="#">수정</a>
-                    <% } %>
+                        <% } %>
                     </div>
                 </article>
                 <% 
@@ -170,7 +194,7 @@
             <!-- 댓글입력폼 -->
             <section class="commentForm">
                 <h3>댓글쓰기</h3>
-                <form action="/Jboard1/proc/procComment.jsp" method="post">
+                <form action="/Jboard1/proc/comment.jsp" method="post">
                 	<input type="hidden" name="parent" value="<%= article.getSeq() %>" />
                 	<input type="hidden" name="uid" value="<%= mb.getUid() %>" />
                     <textarea name="comment"></textarea>

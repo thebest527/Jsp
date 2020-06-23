@@ -108,7 +108,7 @@
             <article>
                 <p>
 					<%= mb.getNick() %>님 반갑습니다.
-                    <a href="/Jboard1/user/proc/procLogout.jsp" class="logout">[로그아웃]</a>
+                    <a href="/Jboard1/user/proc/logout.jsp" class="logout">[로그아웃]</a>
                 </p>
                 <table border="0">
                     <tr>

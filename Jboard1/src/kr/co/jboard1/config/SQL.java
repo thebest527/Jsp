@@ -3,6 +3,8 @@ package kr.co.jboard1.config;
 public class SQL {
 
 	// 회원관리
+	public final static String SELECT_CHECK_UID  = "SELECT COUNT(`uid`) FROM `JBOARD_MEMBER` WHERE `uid` =?";
+	public final static String SELECT_CHECK_NICK = "SELECT COUNT(`nick`) FROM `JBOARD_MEMBER` WHERE `nick` =?";
 	
 	// 게시물 관련
 	public final static String SELECT_TOTAL_COUNT = "SELECT COUNT(`seq`) FROM `JBOARD_ARTICLE` WHERE `parent`=0";
@@ -14,8 +16,10 @@ public class SQL {
 	
 	public final static String UPDATE_HIT     = "UPDATE `JBOARD_ARTICLE` SET `hit`=`hit`+1 WHERE `seq`=?";
 	
-	public final static String SELECT_ARTICLE = "SELECT * FROM `JBOARD_ARTICLE` "
-												+ "WHERE `seq`=?";
+	public final static String SELECT_ARTICLE = "SELECT * FROM `JBOARD_ARTICLE` AS a "
+												+ "LEFT JOIN `JBOARD_FILE` AS b "
+												+ "ON a.seq = b.parent "
+												+ "WHERE a.`seq`=?";
 	
 	public final static String SELECT_ARTICLES = "SELECT a.*, b.nick FROM `JBOARD_ARTICLE` AS a "  
 												+ "JOIN `JBOARD_MEMBER` AS b "
@@ -38,6 +42,9 @@ public class SQL {
 												+ "`oldName`=?, "
 												+ "`newName`=?, "
 												+ "`rdate`=NOW()";
+	
+	public final static String UPDATE_FILE_DOWN_COUNT = "UPDATE `JBOARD_FILE` SET `download`=`download`+1 WHERE `seq`=?";
+	
 
 	public final static String SELECT_COMMENTS = "SELECT a.*, b.nick FROM `JBOARD_ARTICLE` AS a "
 												+ "JOIN `JBOARD_MEMBER` AS b "

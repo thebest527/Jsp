@@ -13,8 +13,8 @@
 	
 	/* DB정보, 1단계, 2단계는 DBConfig로 대체
 		// DB정보
-			String host="jdbc:mysql://192.168.44.46:3306/kkm";
-			String user="kkm";
+			String host="jdbc:mysql://192.168.44.46:3306/psr";
+			String user="psr";
 			String pass="1234";
 			
 		// 1단계

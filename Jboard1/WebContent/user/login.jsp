@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <title>로그인</title>
     <link rel="stylesheet" href="/Jboard1/css/style.css"/>
+    
 </head>
 <body>
     <div id="wrapper">
         <section id="user" class="login">
-            <form action="/Jboard1/user/proc/procLogin.jsp">
+            <form action="/Jboard1/user/proc/login.jsp">
                 <table border="0">
                     <tr>
                         <td><img src="/Jboard1/img/login_ico_id.png" alt="아이디"/></td>

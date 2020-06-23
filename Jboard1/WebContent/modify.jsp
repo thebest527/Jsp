@@ -16,7 +16,7 @@
         <section id="board" class="modify">
             <h3>글수정</h3>
             <article>
-                <form action="/Jboard1/proc/procModify.jsp">
+                <form action="/Jboard1/proc/modify.jsp">
                 		<input type="hidden" name="seq" value=<%= article.getSeq() %> />
                     <table>
                         <tr>
